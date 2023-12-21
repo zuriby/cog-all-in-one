@@ -49,7 +49,7 @@ git clone https://github.com/sakemin/cog-all-in-one
 To run the model, you need a local copy of the model's Docker image. You can satisfy this requirement by specifying the image ID in your call to `predict` like:
 
 ```
-cog predict r8.im/sakemin/all-in-one-music-structure-analyzer@sha256:e2570af7371c7be41de806ca07e7a7e782ba2ce4bdbdbf4e0f21f987a8d48048 -i music_input=@/your/audio/file.wav
+cog predict r8.im/sakemin/all-in-one-music-structure-analyzer@sha256:001b4137be6ac67bdc28cb5cffacf128b874f530258d033de23121e785cb7290 -i music_input=@/your/audio/file.wav
 ```
 
 For more information, see the Cog section [here](https://replicate.com/sakemin/pytsmod/api#run)
