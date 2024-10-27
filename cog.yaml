@@ -44,13 +44,15 @@ build:
     # - "protobuf"
     # - "tensorboard>=1.15"
     # - "pyaudio==0.2.13"
-    - "git+https://github.com/CPJKU/madmom"
+    #- "git+https://github.com/CPJKU/madmom"
     - "ninja"
     # - "allin1"
     # - "pytsmod"
+    - "numpy<2"
       
   # commands run after the environment is setup
   run:
+    - pip3 install "git+https://github.com/CPJKU/madmom#egg=madmom" #installing as python_package causes the image to fail to start
     - pip3 install natten -f https://shi-labs.com/natten/wheels/cu117/torch2.0.0/index.html
     # - curl -o /usr/local/bin/pget -L "https://github.com/replicate/pget/releases/download/v0.0.6/pget" && chmod +x /usr/local/bin/pget
     # - "apt-get update && apt-get install -y ffmpeg"
