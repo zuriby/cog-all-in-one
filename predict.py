@@ -35,6 +35,10 @@ class Predictor(BasePredictor):
             description="Save frame-level embeddings",
             default=False,
         ),
+        demux: bool = Input(
+            description="Save demuxed audio files",
+            default=False,
+        ),
         model: str = Input(
             description="Name of the pretrained model to use",
             default="harmonix-all",
@@ -64,7 +68,7 @@ class Predictor(BasePredictor):
             shutil.rmtree('output')
 
         # Music Structure Analysis
-        music_input_analysis = allin1.analyze(paths=music_input, out_dir='output', visualize=visualize, sonify=sonify, model=model, device=self.device, include_activations=include_activations, include_embeddings=include_embeddings)
+        music_input_analysis = allin1.analyze(paths=music_input, out_dir='output', visualize=visualize, sonify=sonify, model=model, device=self.device, include_activations=include_activations, include_embeddings=include_embeddings, keep_byproducts=demux)
 
         output_dir = []
 
@@ -91,5 +95,21 @@ class Predictor(BasePredictor):
                 for filename in [f for f in filenames if f.rsplit('.', 1)[-1] == "mp3"]:
                     sonification_dir = os.path.join(dirpath, filename)
             output_dir.append(Path(sonification_dir))
+        
+        if demux:
+             # Create output/demix directory
+            demux_dir = Path('output/demix')
+            demux_dir.mkdir(parents=True, exist_ok=True)
+    
+            # Find and copy all .wav files from nested structure
+            htdemucs_dir = Path('demix/htdemucs')
+            if htdemucs_dir.is_dir():
+                for subdir in htdemucs_dir.iterdir():
+                    if subdir.is_dir():  # tmp7rov49plfile or similar temp dirs
+                        for wav_file in subdir.glob('*.wav'):
+                            import shutil
+                            destination = demux_dir / wav_file.name
+                            shutil.copy2(wav_file, destination)
+                            output_dir.append(destination)      
 
         return output_dir
