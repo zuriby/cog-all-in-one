@@ -1,18 +1,19 @@
 # Cog Implementation of All-In-One Music Structure Analyzer
 
-[![Replicate](https://replicate.com/sakemin/all-in-one-music-structure-analyzer/badge)](https://replicate.com/sakemin/all-in-one-music-structure-analyzer) 
+[![Replicate](https://replicate.com/cwalo/all-in-one-music-structure-analysis/badge)](https://replicate.com/cwalo/all-in-one-music-structure-analysis) 
 
-[All-In-One Music Structure Analyzer](https://replicate.com/sakemin/all-in-one-music-structure-analyzer) is a package provides models for music structure analysis, predicting:
+[All-In-One Music Structure Analysis](https://replicate.com/cwalo/all-in-one-music-structure-analysis) is a package provides models for music structure analysis, predicting:
 
 1. Tempo (BPM) 
 2. Beats
 3. Downbeats
 4. Functional segment boundaries
 5. Functional segment labels (e.g., intro, verse, chorus, bridge, outro)
+6. Demux/demix music into its parts (drums, bass, vocals, other)
 
-For more information about this model, see [here]([https://github.com/KAIST-MACLab/PyTSMod](https://github.com/mir-aidj/all-in-one)).
+For more information about this model, see [here](https://github.com/mir-aidj/all-in-one).
 
-You can demo this model or learn how to use it with Replicate's API [here](https://replicate.com/sakemin/all-in-one-music-structure-analyzer). 
+You can demo this model or learn how to use it with Replicate's API [here](https://replicate.com/cwalo/all-in-one-music-structure-analysis). 
 
 ## Prediction
 ### Default Model
@@ -35,13 +36,22 @@ sudo chmod +x /usr/local/bin/cog
 
 Note, to use Cog, you'll also need an installation of [Docker](https://docs.docker.com/get-docker/).
 
-* **GPU machine.** You'll need a Linux machine with an NVIDIA GPU attached and the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker) installed. If you don't already have access to a machine with a GPU, check out our [guide to getting a 
+* **GPU machine.** For best performance, you'll need a Linux machine with an NVIDIA GPU attached and the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker) installed. If you don't already have access to a machine with a GPU, check out our [guide to getting a 
 GPU machine](https://replicate.com/docs/guides/get-a-gpu-machine).
+
+* To use a CPU instead, update the build section of `cog.yaml`. When using a CPU, we recommend using much shorter input files, otherwise prediction will take considerably longer. 
+
+```yaml
+build:
+  # set false to use the CPU if a GPU is not available
+  gpu: true 
+  cuda: "11.7"
+```
 
 ## Step 1. Clone this repository
 
 ```sh
-git clone https://github.com/sakemin/cog-all-in-one
+git clone https://github.com/cwalo/cog-all-in-one
 ```
 
 ## Step 2. Run the model
@@ -49,10 +59,10 @@ git clone https://github.com/sakemin/cog-all-in-one
 To run the model, you need a local copy of the model's Docker image. You can satisfy this requirement by specifying the image ID in your call to `predict` like:
 
 ```
-cog predict r8.im/sakemin/all-in-one-music-structure-analyzer@sha256:001b4137be6ac67bdc28cb5cffacf128b874f530258d033de23121e785cb7290 -i music_input=@/your/audio/file.wav
+cog predict r8.im/cwalo/all-in-one-music-structure-analysis@sha256:001b4137be6ac67bdc28cb5cffacf128b874f530258d033de23121e785cb7290 -i music_input=@/your/audio/file.wav
 ```
 
-For more information, see the Cog section [here](https://replicate.com/sakemin/pytsmod/api#run)
+For more information, see the Cog section [here](https://replicate.com/cwalo/all-in-one-music-structure-analysis/api)
 
 Alternatively, you can build the image yourself, either by running `cog build` or by letting `cog predict` trigger the build process implicitly. For example, the following will trigger the build process and then execute prediction: 
 
