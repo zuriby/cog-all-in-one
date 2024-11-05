@@ -2,7 +2,7 @@
 
 [![Replicate](https://replicate.com/cwalo/all-in-one-music-structure-analysis/badge)](https://replicate.com/cwalo/all-in-one-music-structure-analysis) 
 
-[All-In-One Music Structure Analysis](https://replicate.com/cwalo/all-in-one-music-structure-analysis) is a package provides models for music structure analysis, predicting:
+[All-In-One Music Structure Analysis](https://replicate.com/cwalo/all-in-one-music-structure-analysis) is a package that provides models for music structure analysis, predicting:
 
 1. Tempo (BPM) 
 2. Beats
