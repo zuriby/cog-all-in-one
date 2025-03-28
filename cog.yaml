@@ -10,7 +10,7 @@ build:
   system_packages:
     - "ffmpeg"
 
-  python_version: "3.9"
+  python_version: "3.11"
   python_requirements: requirements.txt
 
   # commands run after the environment is setup
