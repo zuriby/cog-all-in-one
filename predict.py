@@ -1,12 +1,15 @@
 # Prediction interface for Cog ⚙️
 # https://github.com/replicate/cog/blob/main/docs/python.md
 
+import os
+import shutil
+
 from typing import List
-from cog import BasePredictor, BaseModel, Input, Path
 
 import torch
 import allin1
-import os 
+
+from cog import BasePredictor, BaseModel, Input, Path
 
 class Predictor(BasePredictor):
     def setup(self):
@@ -57,25 +60,29 @@ class Predictor(BasePredictor):
         if not music_input:
             raise ValueError("Must provide `music_input`.")
 
-        if os.path.isdir('demix'):
-            import shutil
-            shutil.rmtree('demix')
-        if os.path.isdir('spec'):
-            import shutil
-            shutil.rmtree('spec')
-        if os.path.isdir('output'):
-            import shutil
-            shutil.rmtree('output')
+        for folder in ('demix', 'spec', 'output'):
+            if os.path.isdir(folder):
+                shutil.rmtree(folder)
 
         # Music Structure Analysis
-        music_input_analysis = allin1.analyze(paths=music_input, out_dir='output', visualize=visualize, sonify=sonify, model=model, device=self.device, include_activations=include_activations, include_embeddings=include_embeddings, keep_byproducts=demux)
+        music_input_analysis = allin1.analyze(
+            paths=music_input,
+            out_dir='output',
+            visualize=visualize,
+            sonify=sonify,
+            model=model,
+            device=self.device,
+            include_activations=include_activations,
+            include_embeddings=include_embeddings,
+            keep_byproducts=demux
+        )
 
         output_dir = []
 
         for dirpath, dirnames, filenames in os.walk("output"):
             for filename in [f for f in filenames if f.rsplit('.', 1)[-1] == "json"]:
                 json_dir = os.path.join(dirpath, filename)
-        output_dir.append(Path(json_dir))
+                output_dir.append(Path(json_dir))
 
         if visualize:
             for dirpath, dirnames, filenames in os.walk("viz"):
@@ -87,14 +94,14 @@ class Predictor(BasePredictor):
                         img = page.get_pixmap()
                         img_dir = str(visualization_dir).rsplit('.',1)[0]+'.png'
                         img.save(img_dir)
+                        output_dir.append(Path(img_dir))
                         break
-            output_dir.append(Path(img_dir))
 
         if sonify:
             for dirpath, dirnames, filenames in os.walk("sonif"):
                 for filename in [f for f in filenames if f.rsplit('.', 1)[-1] == "mp3"]:
                     sonification_dir = os.path.join(dirpath, filename)
-            output_dir.append(Path(sonification_dir))
+                    output_dir.append(Path(sonification_dir))
         
         if demux:
              # Create output/demix directory
@@ -107,7 +114,6 @@ class Predictor(BasePredictor):
                 for subdir in htdemucs_dir.iterdir():
                     if subdir.is_dir():  # tmp7rov49plfile or similar temp dirs
                         for wav_file in subdir.glob('*.wav'):
-                            import shutil
                             destination = demux_dir / wav_file.name
                             shutil.copy2(wav_file, destination)
                             output_dir.append(destination)      

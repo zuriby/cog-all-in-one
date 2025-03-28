@@ -1,0 +1,11 @@
+torch==2.0.1
+hydra-core>=1.1
+huggingface_hub
+tqdm
+matplotlib
+omegaconf
+demucs
+librosa
+PyMuPDF
+ninja
+numpy<2
